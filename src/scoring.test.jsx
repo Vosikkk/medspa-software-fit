@@ -50,7 +50,10 @@ describe("recommendation regression cases",()=>{
    const ranked=rankVendors(f);
    expect(ranked.filter(v=>v.gate.eligible).map(v=>v.name)).toEqual(expect.arrayContaining(["Zenoti","AestheticsPro","Vagaro","Mangomint","Phorest"]));
    expect(ranked.find(v=>v.name==="Zenoti").gate.eligible).toBe(true);
-   expect(ranked.find(v=>v.name==="AestheticsPro").gate.eligible).toBe(true);\n   expect(ranked.find(v=>v.name==="Vagaro").gate.eligible).toBe(true);\n   expect(ranked.find(v=>v.name==="Mangomint").gate.eligible).toBe(true);\n   expect(ranked.find(v=>v.name==="Phorest").gate.eligible).toBe(false); // advanced clinical gate still fails
+   expect(ranked.find(v=>v.name==="AestheticsPro").gate.eligible).toBe(true);
+   expect(ranked.find(v=>v.name==="Vagaro").gate.eligible).toBe(true);
+   expect(ranked.find(v=>v.name==="Mangomint").gate.eligible).toBe(true);
+   expect(ranked.find(v=>v.name==="Phorest").gate.eligible).toBe(false); // advanced clinical gate still fails
  });
  it("PatientNow stays eligible when e-prescribing is required",()=>{
    const f={...base,clinical:"advanced",eprescribe:true};
