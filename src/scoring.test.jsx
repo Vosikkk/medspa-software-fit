@@ -48,9 +48,9 @@ describe("recommendation regression cases",()=>{
  it("injectable batch tracking narrows the shortlist to verified capability",()=>{
    const f={...base,clinical:"advanced",injectableTracking:true};
    const ranked=rankVendors(f);
-   expect(ranked.filter(v=>v.gate.eligible).map(v=>v.name)).toEqual(expect.arrayContaining(["Zenoti","AestheticsPro","Vagaro"]));
+   expect(ranked.filter(v=>v.gate.eligible).map(v=>v.name)).toEqual(expect.arrayContaining(["Zenoti","AestheticsPro","Vagaro","Mangomint"]));
    expect(ranked.find(v=>v.name==="Zenoti").gate.eligible).toBe(true);
-   expect(ranked.find(v=>v.name==="AestheticsPro").gate.eligible).toBe(true);\n   expect(ranked.find(v=>v.name==="Vagaro").gate.eligible).toBe(true);
+   expect(ranked.find(v=>v.name==="AestheticsPro").gate.eligible).toBe(true);\n   expect(ranked.find(v=>v.name==="Vagaro").gate.eligible).toBe(true);\n   expect(ranked.find(v=>v.name==="Mangomint").gate.eligible).toBe(true);
  });
  it("PatientNow stays eligible when e-prescribing is required",()=>{
    const f={...base,clinical:"advanced",eprescribe:true};
