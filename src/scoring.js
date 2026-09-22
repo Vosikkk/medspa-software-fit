@@ -47,3 +47,23 @@ export function demoQuestions(f,ranked){
  if(q.length<5)q.push("What important workflow in our profile is not included in the quoted plan by default?");
  return q.slice(0,5);
 }
+
+export function resultGuidance(v,f){
+ const best=[];
+ if(f.providers<=2&&v.scaleFit<=4)best.push("smaller practices avoiding enterprise complexity");
+ if(f.providers>=6&&v.scaleFit>=4)best.push("larger operating teams");
+ if(f.locations>=2&&v.multiOps>=4)best.push("multi-location operations");
+ if(f.clinical==="advanced"&&v.deepMedical)best.push("advanced clinical workflows");
+ if(f.marketing&&v.marketingCap>=4)best.push("CRM and marketing-heavy workflows");
+ if(f.switching&&v.migrationSupport>=4)best.push("practices where migration support matters");
+ const watch=[];
+ if(f.clinical==="advanced"&&!v.deepMedical)watch.push("does not meet the advanced clinical requirement");
+ if(f.injectableTracking&&!v.injectableTracking)watch.push("does not meet the injectable / batch tracking requirement");
+ if(f.eprescribe&&!v.eprescribe)watch.push("does not meet the e-prescribing requirement");
+ if(f.providers<=2&&v.scaleFit>=5)watch.push("may add more operational complexity than a very small practice needs");
+ if(f.locations>=3&&v.multiOps<4)watch.push("verify multi-location controls for your exact setup");
+ if(f.budget==="low"&&v.budget>=3)watch.push("verify the all-in quote against your sub-$200 budget");
+ if(f.switching&&v.migrationSupport<4)watch.push("verify exactly what data migration is included");
+ if(f.flexibility==="important"&&v.contractFlex<4)watch.push("verify contract term, renewal and cancellation conditions");
+ return {bestIf:best.slice(0,2),watchOut:watch.slice(0,2)};
+}
