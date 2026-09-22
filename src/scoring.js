@@ -34,7 +34,7 @@ export function demoQuestions(f,ranked){
  const top=ranked.filter(v=>v.gate.eligible).slice(0,3),q=[];
  if(f.switching)q.push("Exactly what data will you migrate for us—client profiles, notes, forms, photos, packages, memberships, gift cards and payment details—and what will not transfer?");
  if(f.eprescribe)q.push("Show the e-prescribing workflow live. Which states, prescribers, controlled substances and pharmacy-network limitations apply?");
- if(f.injectableTracking)q.push("Show how you record injectable lot numbers, expiration dates and treatment details, and how a recall is traced back to affected clients.");
+ if(f.injectableTracking)q.push("Show how you record injectable lot numbers, expiration dates and treatment details in the patient record.");\n if(f.recallTraceability)q.push("Using a sample recalled lot number, show how you identify every affected patient, location, administering employee and remaining unit of stock.");
  if(f.locations>=2)q.push("Show how staff, inventory, memberships, client records and reporting work across all locations without duplicate setup.");
  if(f.marketing)q.push("Which CRM and marketing automations are included in our quoted plan, and which require paid add-ons or external integrations?");
  if(f.integrations)q.push("Which of our required integrations are native, which use an API or middleware, and what extra fees apply?");
@@ -58,7 +58,7 @@ export function resultGuidance(v,f){
  if(f.switching&&v.migrationSupport>=4)best.push("practices where migration support matters");
  const watch=[];
  if(f.clinical==="advanced"&&!v.deepMedical)watch.push("does not meet the advanced clinical requirement");
- if(f.injectableTracking&&!v.injectableTracking)watch.push("does not meet the injectable / batch tracking requirement");
+ if(f.injectableTracking&&!v.injectableTracking)watch.push("does not meet the injectable / batch tracking requirement");\n if(f.recallTraceability&&!v.recallTraceability)watch.push("does not meet the patient-level recall traceability requirement");
  if(f.eprescribe&&!v.eprescribe)watch.push("does not meet the e-prescribing requirement");
  if(f.providers<=2&&v.scaleFit>=5)watch.push("may add more operational complexity than a very small practice needs");
  if(f.locations>=3&&v.multiOps<4)watch.push("verify multi-location controls for your exact setup");
