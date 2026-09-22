@@ -259,6 +259,14 @@ describe("recommendation regression cases",()=>{
    expect(fieldLabels.recallTraceability).toBe("Patient-level recall traceability");
    expect(fieldLabels.migrationSupport).toBe("Data migration");
  });
+ it("unknown critical evidence cannot produce fake strong confidence",()=>{
+   expect(fitLabel(95,12,{eligible:true},{verified:1,total:4})).toBe("Possible fit");
+   expect(fitLabel(95,12,{eligible:true},{verified:3,total:4})).toBe("Strong fit");
+ });
+ it("verified recall belongs to Zenoti, not AestheticsPro",()=>{
+   expect(vendors.find(v=>v.name==="Zenoti").recallTraceability).toBe(true);
+   expect(vendors.find(v=>v.name==="AestheticsPro").recallTraceability).toBe(false);
+ });
  it("ranking is deterministic",()=>{
    const f={...base,providers:4,clinical:"advanced",switching:true};
    expect(rankVendors(f).map(x=>x.name)).toEqual(rankVendors(f).map(x=>x.name));
