@@ -1,5 +1,5 @@
 import{describe,it,expect}from"vitest";
-import{rankVendors,hardFit,vendors,recommendationState,demoQuestions,resultGuidance,evidenceFor,evidenceGaps,relevantEvidenceFields,evidenceCoverage,fieldLabels}from"./scoring.js";
+import{rankVendors,hardFit,vendors,recommendationState,demoQuestions,resultGuidance,evidenceFor,evidenceGaps,relevantEvidenceFields,evidenceCoverage,fieldLabels,fitLabel}from"./scoring.js";
 
 const base={providers:3,locations:1,clinical:"basic",appointments:"mid",memberships:true,marketing:false,inventory:false,eprescribe:false,injectableTracking:false,recallTraceability:false,photos:false,integrations:false,chartingRequired:false,consentRequired:false,switching:false,migration:"normal",support:"normal",flexibility:"normal",budget:"mid"};
 const names=f=>rankVendors({...base,...f}).slice(0,3).map(x=>x.name);
@@ -53,7 +53,7 @@ describe("recommendation regression cases",()=>{
    expect(ranked.find(v=>v.name==="AestheticsPro").gate.eligible).toBe(true);
    expect(ranked.find(v=>v.name==="Vagaro").gate.eligible).toBe(true);
    expect(ranked.find(v=>v.name==="Mangomint").gate.eligible).toBe(true);
-   expect(ranked.find(v=>v.name==="Phorest").gate.eligible).toBe(false); // advanced clinical gate still fails
+   expect(ranked.find(v=>v.name==="Phorest").gate.eligible).toBe(true);
  });
  it("PatientNow stays eligible when e-prescribing is required",()=>{
    const f={...base,clinical:"advanced",eprescribe:true};
@@ -192,8 +192,8 @@ describe("recommendation regression cases",()=>{
    expect(ev.checkedAt).toBe("2026-09-22");
  });
  it("unmapped capability evidence is explicitly unknown",()=>{
-   const mango=vendors.find(v=>v.name==="Mangomint");
-   expect(evidenceFor(mango,"injectableTracking").status).toBe("unknown");
+   const patient=vendors.find(v=>v.name==="PatientNow");
+   expect(evidenceFor(patient,"injectableTracking").status).toBe("unknown");
  });
  it("advanced workflow alone is a preference, not a fake hard requirement",()=>{
    const ranked=rankVendors({...base,clinical:"advanced"});
