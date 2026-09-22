@@ -1,5 +1,5 @@
 import{describe,it,expect}from"vitest";
-import{rankVendors,hardFit,vendors,recommendationState}from"./scoring.js";
+import{rankVendors,hardFit,vendors,recommendationState,demoQuestions}from"./scoring.js";
 
 const base={providers:3,locations:1,clinical:"basic",appointments:"mid",memberships:true,marketing:false,inventory:false,eprescribe:false,injectableTracking:false,photos:false,integrations:false,switching:false,migration:"normal",support:"normal",flexibility:"normal",budget:"mid"};
 const names=f=>rankVendors({...base,...f}).slice(0,3).map(x=>x.name);
@@ -155,6 +155,17 @@ describe("recommendation regression cases",()=>{
    const ranked=rankVendors({...base,providers:3});
    const state=recommendationState(ranked);
    if(ranked.filter(v=>v.gate.eligible).length>=3&&ranked[0].score-ranked[1].score<5)expect(state.type).toBe("close");
+ });
+ it("demo questions adapt to switching and clinical requirements",()=>{
+   const f={...base,switching:true,eprescribe:true,clinical:"advanced",support:"important",flexibility:"important"};
+   const qs=demoQuestions(f,rankVendors(f));
+   expect(qs).toHaveLength(5);
+   expect(qs.some(q=>q.includes("migrate"))).toBe(true);
+   expect(qs.some(q=>q.includes("e-prescribing"))).toBe(true);
+ });
+ it("injectable workflow gets a lot-tracking demo question",()=>{
+   const f={...base,clinical:"advanced",injectableTracking:true};
+   expect(demoQuestions(f,rankVendors(f)).some(q=>q.includes("lot numbers"))).toBe(true);
  });
  it("ranking is deterministic",()=>{
    const f={...base,providers:4,clinical:"advanced",switching:true};
