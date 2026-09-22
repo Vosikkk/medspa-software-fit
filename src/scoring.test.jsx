@@ -1,7 +1,7 @@
 import{describe,it,expect}from"vitest";
 import{rankVendors,hardFit,vendors}from"./main.jsx";
 
-const base={providers:3,locations:1,clinical:"basic",appointments:"mid",memberships:true,marketing:false,inventory:false,eprescribe:false,photos:false,integrations:false,switching:false,migration:"normal",support:"normal",flexibility:"normal",budget:"mid"};
+const base={providers:3,locations:1,clinical:"basic",appointments:"mid",memberships:true,marketing:false,inventory:false,eprescribe:false,injectableTracking:false,photos:false,integrations:false,switching:false,migration:"normal",support:"normal",flexibility:"normal",budget:"mid"};
 const names=f=>rankVendors({...base,...f}).slice(0,3).map(x=>x.name);
 
 describe("recommendation regression cases",()=>{
@@ -25,6 +25,13 @@ describe("recommendation regression cases",()=>{
    const top=names({providers:4,clinical:"advanced",eprescribe:true,switching:true,migration:"important",support:"important",flexibility:"important",inventory:true,photos:true});
    expect(top).not.toContain("Mangomint");
    expect(top).not.toContain("Phorest");
+ });
+ it("injectable batch tracking narrows the shortlist to verified capability",()=>{
+   const f={...base,clinical:"advanced",injectableTracking:true};
+   const ranked=rankVendors(f);
+   expect(ranked[0].name).toBe("Zenoti");
+   expect(ranked[0].gate.eligible).toBe(true);
+   for(const v of ranked.filter(v=>v.name!=="Zenoti"))expect(v.gate.eligible).toBe(false);
  });
  it("ranking is deterministic",()=>{
    const f={...base,providers:4,clinical:"advanced",switching:true};
