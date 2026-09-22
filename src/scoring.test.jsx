@@ -1,7 +1,7 @@
 import{describe,it,expect}from"vitest";
 import{rankVendors,hardFit,vendors,recommendationState,demoQuestions,resultGuidance,evidenceFor}from"./scoring.js";
 
-const base={providers:3,locations:1,clinical:"basic",appointments:"mid",memberships:true,marketing:false,inventory:false,eprescribe:false,injectableTracking:false,photos:false,integrations:false,switching:false,migration:"normal",support:"normal",flexibility:"normal",budget:"mid"};
+const base={providers:3,locations:1,clinical:"basic",appointments:"mid",memberships:true,marketing:false,inventory:false,eprescribe:false,injectableTracking:false,photos:false,integrations:false,chartingRequired:false,consentRequired:false,switching:false,migration:"normal",support:"normal",flexibility:"normal",budget:"mid"};
 const names=f=>rankVendors({...base,...f}).slice(0,3).map(x=>x.name);
 
 describe("recommendation regression cases",()=>{
@@ -191,6 +191,17 @@ describe("recommendation regression cases",()=>{
  it("unmapped capability evidence is explicitly unknown",()=>{
    const mango=vendors.find(v=>v.name==="Mangomint");
    expect(evidenceFor(mango,"injectableTracking").status).toBe("unknown");
+ });
+ it("advanced workflow alone is a preference, not a fake hard requirement",()=>{
+   const ranked=rankVendors({...base,clinical:"advanced"});
+   expect(ranked.every(v=>v.gate.eligible)).toBe(true);
+ });
+ it("explicit charting and consent requirements are hard gates",()=>{
+   const f={...base,chartingRequired:true,consentRequired:true};
+   for(const v of rankVendors(f).filter(v=>v.gate.eligible)){
+     expect(v.charting).toBe(true);
+     expect(v.consent).toBe(true);
+   }
  });
  it("ranking is deterministic",()=>{
    const f={...base,providers:4,clinical:"advanced",switching:true};
