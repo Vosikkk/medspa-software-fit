@@ -74,6 +74,21 @@ describe("recommendation regression cases",()=>{
    expect(ranked.find(v=>v.name==="Zenoti").highVolume).toBe(5);
    expect(ranked.find(v=>v.name==="Phorest").highVolume).toBe(5);
  });
+ it("workflow preferences are scored from capability fields",()=>{
+   const ranked=rankVendors({...base,memberships:true,marketing:true,inventory:true,integrations:true});
+   for(const v of ranked){
+     expect(v.membershipsCap).toBeTypeOf("number");
+     expect(v.marketingCap).toBeTypeOf("number");
+     expect(v.inventoryCap).toBeTypeOf("number");
+     expect(v.integrationsCap).toBeTypeOf("number");
+   }
+ });
+ it("marketing-heavy profile rewards stronger marketing capability",()=>{
+   const ranked=rankVendors({...base,memberships:false,marketing:true});
+   const patient=ranked.find(v=>v.name==="PatientNow");
+   const vagaro=ranked.find(v=>v.name==="Vagaro");
+   expect(patient.marketingCap).toBeGreaterThan(vagaro.marketingCap);
+ });
  it("ranking is deterministic",()=>{
    const f={...base,providers:4,clinical:"advanced",switching:true};
    expect(rankVendors(f).map(x=>x.name)).toEqual(rankVendors(f).map(x=>x.name));
