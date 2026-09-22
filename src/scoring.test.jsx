@@ -33,6 +33,16 @@ describe("recommendation regression cases",()=>{
    expect(ranked[0].gate.eligible).toBe(true);
    for(const v of ranked.filter(v=>v.name!=="Zenoti"))expect(v.gate.eligible).toBe(false);
  });
+ it("PatientNow stays eligible when e-prescribing is required",()=>{
+   const f={...base,clinical:"advanced",eprescribe:true};
+   const patientNow=rankVendors(f).find(v=>v.name==="PatientNow");
+   expect(patientNow.eprescribe).toBe(true);
+   expect(patientNow.gate.eligible).toBe(true);
+ });
+ it("photo workflows use explicit vendor capability flags",()=>{
+   const ranked=rankVendors({...base,photos:true});
+   expect(ranked.filter(v=>v.photos).length).toBeGreaterThan(0);
+ });
  it("ranking is deterministic",()=>{
    const f={...base,providers:4,clinical:"advanced",switching:true};
    expect(rankVendors(f).map(x=>x.name)).toEqual(rankVendors(f).map(x=>x.name));
