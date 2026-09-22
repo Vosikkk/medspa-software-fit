@@ -102,4 +102,17 @@ Object.assign(evidence,{
   inventoryCap:{status:"verified",source:"https://www.vagaro.com/pro/inventory",checkedAt:"2026-09-22",note:"Vendor documents real-time inventory, purchase orders, reorder alerts and location/storage assignment."}
  }
 });
+
+Object.assign(evidence,{
+ AestheticsPro:{
+  eprescribe:{status:"verified",source:"https://www.aestheticspro.com/Software-Pricing/",checkedAt:"2026-09-22",note:"Vendor lists E-Prescribe in Pro-Plus and higher; some features may require an additional fee."},
+  charting:{status:"verified",source:"https://www.aestheticspro.com/Medical-Spa-Software/",checkedAt:"2026-09-22",note:"Vendor documents HIPAA-compliant EMR, charting, digital forms and client records."},
+  photos:{status:"verified",source:"https://www.aestheticspro.com/Software-Features/",checkedAt:"2026-09-22",note:"AP Photo documents HIPAA-compliant progress photos, alignment, markup and side-by-side comparison."},
+  inventoryCap:{status:"verified",source:"https://www.aestheticspro.com/Software-Pricing/",checkedAt:"2026-09-22",note:"Vendor documents inventory management and low-inventory alerts."},
+  integrationsCap:{status:"verified",source:"https://www.aestheticspro.com/Medical-Spa-Software/",checkedAt:"2026-09-22",note:"Vendor documents native integrations plus webhooks; Executive and Enterprise advertise advanced integrations."},
+  multiOps:{status:"verified",source:"https://www.aestheticspro.com/Software-Pricing/",checkedAt:"2026-09-22",note:"Executive and Enterprise plans explicitly support multi-location practices."},
+  migrationSupport:{status:"verified",source:"https://www.aestheticspro.com/Medspa-Software/",checkedAt:"2026-09-22",note:"Vendor states it helps configure the system, migrate data and prepare the practice to go live."},
+  humanSupport:{status:"verified",source:"https://www.aestheticspro.com/Getting-Started/",checkedAt:"2026-09-22",note:"Vendor documents dedicated onboarding, customized training, Client Success Manager and ongoing support."}
+ }
+});
 export function evidenceFor(v,field){return evidence[v.name]?.[field]||{status:"unknown",source:null,checkedAt:null,note:"Not yet independently mapped to current vendor documentation."}}
