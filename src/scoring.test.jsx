@@ -137,6 +137,16 @@ describe("recommendation regression cases",()=>{
    expect(eligible.length).toBeGreaterThanOrEqual(3);
    expect(eligible.every(v=>v.deepMedical&&v.eprescribe)).toBe(true);
  });
+ it("scores preserve ranking differences instead of saturating at 94",()=>{
+   const ranked=rankVendors({...base,providers:15,locations:5,appointments:"high",budget:"high",marketing:true,inventory:true,integrations:true});
+   expect(ranked.some(v=>v.score>94)).toBe(true);
+   for(let i=1;i<ranked.length;i++)if(ranked[i-1].gate.eligible===ranked[i].gate.eligible)expect(ranked[i-1].score).toBeGreaterThanOrEqual(ranked[i].score);
+ });
+ it("ranking exposes recommendation margin for confidence calibration",()=>{
+   const ranked=rankVendors({...base,providers:4,clinical:"advanced",eprescribe:true});
+   expect(ranked[0].margin).toBeTypeOf("number");
+   expect(ranked[0].margin).toBeGreaterThanOrEqual(0);
+ });
  it("ranking is deterministic",()=>{
    const f={...base,providers:4,clinical:"advanced",switching:true};
    expect(rankVendors(f).map(x=>x.name)).toEqual(rankVendors(f).map(x=>x.name));
