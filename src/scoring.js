@@ -1,4 +1,6 @@
 export const vendors=[
+{name:"Pabau",membershipsCap:5,inventoryCap:5,marketingCap:4,integrationsCap:5,scaleFit:4,multiOps:4,highVolume:4,base:69,migrationSupport:3,humanSupport:3,contractFlex:5,cost:"From about $62–$65/mo; verify current US quote",strengths:["clinic-focused records, forms & photos","prescriptions, inventory & integrations","published entry pricing; no annual lock-in"],clinical:5,multi:4,budget:2,crm:4,eprescribe:true,advancedClinical:true,charting:true,photos:true,injectableTracking:false,deepMedical:true,consent:true,recallTraceability:false},
+{name:"Boulevard",membershipsCap:5,inventoryCap:4,marketingCap:5,integrationsCap:5,scaleFit:4,multiOps:5,highVolume:4,base:67,migrationSupport:3,humanSupport:3,contractFlex:2,cost:"Tiered per-location pricing; verify current quote and clinical add-ons",strengths:["med-spa scheduling, forms & charts","ePrescribe, APIs & integrations","memberships, marketing & multi-location operations"],clinical:4,multi:5,budget:3,crm:5,eprescribe:true,advancedClinical:true,charting:true,photos:true,injectableTracking:false,deepMedical:true,consent:true,recallTraceability:false},
 {name:"Mangomint",membershipsCap:5,inventoryCap:4,marketingCap:4,integrationsCap:5,scaleFit:4,multiOps:4,highVolume:3,base:72,migrationSupport:4,humanSupport:4,contractFlex:5,cost:"$120/location + $10/user",strengths:["HIPAA-capable forms & charting with BAA","memberships, inventory & integrations","free onboarding/data transfer; cancel anytime"],clinical:3,multi:3,budget:2,crm:4,eprescribe:false,advancedClinical:false,charting:true,photos:true,injectableTracking:true,deepMedical:false,consent:true,recallTraceability:false},
 {name:"AestheticsPro",membershipsCap:4,inventoryCap:5,marketingCap:3,integrationsCap:3,scaleFit:3,multiOps:3,highVolume:3,base:70,migrationSupport:2,humanSupport:2,contractFlex:2,cost:"$160 Pro-Plus; $285 Executive; $350 Enterprise",strengths:["med-spa EMR, photos & 500+ forms","e-prescribing and inventory","Executive/Enterprise support multi-location"],clinical:5,multi:4,budget:2,crm:3,eprescribe:true,advancedClinical:true,charting:true,photos:true,injectableTracking:true,deepMedical:true,consent:true,recallTraceability:false},
 {name:"PatientNow",membershipsCap:4,inventoryCap:5,marketingCap:5,integrationsCap:5,scaleFit:4,multiOps:4,highVolume:4,base:68,migrationSupport:5,humanSupport:5,contractFlex:5,cost:"Custom quote",strengths:["aesthetic EMR, photos & inventory","memberships, marketing & practice management","free onboarding/migration; no long-term contract"],clinical:5,multi:4,budget:4,crm:5,eprescribe:true,advancedClinical:true,charting:true,photos:true,injectableTracking:false,deepMedical:true,consent:false,recallTraceability:false},
@@ -120,6 +122,26 @@ Object.assign(evidence,{
   migrationSupport:{status:"verified",source:"https://www.aestheticspro.com/Medspa-Software/",checkedAt:"2026-09-22",note:"Vendor states it helps configure the system, migrate data and prepare the practice to go live."},
   humanSupport:{status:"verified",source:"https://www.aestheticspro.com/Getting-Started/",checkedAt:"2026-09-22",note:"Vendor documents dedicated onboarding, customized training, Client Success Manager and ongoing support."},
   injectableTracking:{status:"verified",source:"https://www.aestheticspro.com/Blog/med-spa-software-features/",checkedAt:"2026-09-22",note:"Vendor-authored 2026 feature guidance describes integrated EMR injectable charting by units, areas and lot numbers plus inventory tracking by lot number and expiration date. Recall workflow is not explicitly documented and should still be verified in demo."}
+ }
+});
+Object.assign(evidence,{
+ Pabau:{
+  eprescribe:{status:"verified",source:"https://pabau.com/",checkedAt:"2026-09-22",note:"Vendor lists prescriptions among its clinic care capabilities and integrations."},
+  charting:{status:"verified",source:"https://pabau.com/",checkedAt:"2026-09-22",note:"Vendor documents care/documentation workflows and digital forms for clinics and med spas."},
+  photos:{status:"verified",source:"https://pabau.com/features/care-plus/",checkedAt:"2026-09-22",note:"Vendor documents enhanced before-and-after photo tools."},
+  consent:{status:"verified",source:"https://pabau.com/",checkedAt:"2026-09-22",note:"Vendor documents digital forms and aesthetic-practice consent workflows."},
+  inventoryCap:{status:"verified",source:"https://pabau.com/",checkedAt:"2026-09-22",note:"Vendor lists inventory and orders among core operations capabilities."},
+  integrationsCap:{status:"verified",source:"https://pabau.com/",checkedAt:"2026-09-22",note:"Vendor documents integrations with external tools."},
+  contractFlex:{status:"verified",source:"https://pabau.com/blog/practice-fusion-pricing/",checkedAt:"2026-09-22",note:"Vendor states published entry pricing with no annual lock-in; verify terms for the exact US plan."}
+ },
+ Boulevard:{
+  eprescribe:{status:"verified",source:"https://www.joinblvd.com/medical-spa-software",checkedAt:"2026-09-22",note:"Vendor lists ePrescribe as a med-spa feature."},
+  charting:{status:"verified",source:"https://www.joinblvd.com/medical-spa-software",checkedAt:"2026-09-22",note:"Vendor lists Forms & Charts for med spas; plan/add-on availability should be confirmed."},
+  photos:{status:"verified",source:"https://blvdco-origin.prod.joinblvd.com/pricing",checkedAt:"2026-09-22",note:"Vendor pricing matrix documents photo markup on applicable tiers/add-ons."},
+  consent:{status:"verified",source:"https://www.joinblvd.com/medical-spa-software",checkedAt:"2026-09-22",note:"Vendor documents forms/charts for med-spa workflows; confirm exact consent workflow in demo."},
+  inventoryCap:{status:"verified",source:"https://blvdco-origin.prod.joinblvd.com/pricing",checkedAt:"2026-09-22",note:"Vendor pricing matrix documents product catalog, quantity tracking, adjustments and purchase orders by tier."},
+  integrationsCap:{status:"verified",source:"https://www.joinblvd.com/medical-spa-software",checkedAt:"2026-09-22",note:"Vendor lists APIs and integrations among med-spa capabilities."},
+  multiOps:{status:"verified",source:"https://www.joinblvd.com/medical-spa-software",checkedAt:"2026-09-22",note:"Vendor explicitly supports multi-location businesses and enterprises."}
  }
 });
 export function evidenceFor(v,field){return evidence[v.name]?.[field]||{status:"unknown",source:null,checkedAt:null,note:"Not yet independently mapped to current vendor documentation."}}
