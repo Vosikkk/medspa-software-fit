@@ -29,3 +29,21 @@ return s}
 export function fitLabel(score,margin=0,gate={eligible:true}){if(!gate.eligible)return "Does not meet a required need";if(score>=82&&margin>=5)return "Strong fit";if(score>=70)return "Good fit";return "Possible fit"}
 export function recommendationState(ranked){const eligible=ranked.filter(v=>v.gate.eligible);if(!eligible.length)return {type:"none",message:"No vendor in the current dataset meets every required need."};if(eligible.length<3)return {type:"limited",message:`Only ${eligible.length} vendor${eligible.length===1?"":"s"} in the current dataset meet every required need.`};const gap=eligible[0].score-eligible[1].score;if(gap<5)return {type:"close",message:"The leading options are close. Compare trade-offs rather than treating #1 as a clear winner."};return {type:"clear",message:"The first option separates from the rest on the preferences you selected."}}
 export function rankVendors(f){const ranked=vendors.map(v=>({...v,score:score(v,f),gate:hardFit(v,f)})).sort((a,b)=>(b.gate.eligible-a.gate.eligible)||(b.score-a.score));return ranked.map((v,i)=>({...v,margin:i<ranked.length-1&&ranked[i+1].gate.eligible===v.gate.eligible?v.score-ranked[i+1].score:0}))}
+
+export function demoQuestions(f,ranked){
+ const top=ranked.filter(v=>v.gate.eligible).slice(0,3),q=[];
+ if(f.switching)q.push("Exactly what data will you migrate for us—client profiles, notes, forms, photos, packages, memberships, gift cards and payment details—and what will not transfer?");
+ if(f.eprescribe)q.push("Show the e-prescribing workflow live. Which states, prescribers, controlled substances and pharmacy-network limitations apply?");
+ if(f.injectableTracking)q.push("Show how you record injectable lot numbers, expiration dates and treatment details, and how a recall is traced back to affected clients.");
+ if(f.locations>=2)q.push("Show how staff, inventory, memberships, client records and reporting work across all locations without duplicate setup.");
+ if(f.marketing)q.push("Which CRM and marketing automations are included in our quoted plan, and which require paid add-ons or external integrations?");
+ if(f.integrations)q.push("Which of our required integrations are native, which use an API or middleware, and what extra fees apply?");
+ if(f.memberships)q.push("Show how memberships, packages, freezes, cancellations, failed payments and cross-location redemption work.");
+ if(f.inventory)q.push("Show inventory depletion from treatment through reorder, including multi-location transfers if applicable.");
+ if(f.photos)q.push("Show the before/after photo workflow, consent handling, storage, access controls and export process.");
+ if(f.support==="important")q.push("After onboarding, who handles support, what are the support hours and escalation path, and is priority support an extra charge?");
+ if(f.flexibility==="important")q.push("What is the exact contract term, renewal process, cancellation notice and early-termination cost?");
+ if(f.budget!=="high")q.push("Give us the all-in monthly and first-year cost for our exact provider/location count, including onboarding, add-ons, payment fees and required modules.");
+ if(q.length<5)q.push("What important workflow in our profile is not included in the quoted plan by default?");
+ return q.slice(0,5);
+}
