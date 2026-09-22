@@ -1,5 +1,5 @@
 import{describe,it,expect}from"vitest";
-import{rankVendors,hardFit,vendors}from"./scoring.js";
+import{rankVendors,hardFit,vendors,recommendationState}from"./scoring.js";
 
 const base={providers:3,locations:1,clinical:"basic",appointments:"mid",memberships:true,marketing:false,inventory:false,eprescribe:false,injectableTracking:false,photos:false,integrations:false,switching:false,migration:"normal",support:"normal",flexibility:"normal",budget:"mid"};
 const names=f=>rankVendors({...base,...f}).slice(0,3).map(x=>x.name);
@@ -146,6 +146,15 @@ describe("recommendation regression cases",()=>{
    const ranked=rankVendors({...base,providers:4,clinical:"advanced",eprescribe:true});
    expect(ranked[0].margin).toBeTypeOf("number");
    expect(ranked[0].margin).toBeGreaterThanOrEqual(0);
+ });
+ it("injectable lot tracking reports a limited shortlist",()=>{
+   const state=recommendationState(rankVendors({...base,clinical:"advanced",injectableTracking:true}));
+   expect(state.type).toBe("limited");
+ });
+ it("close leaders are reported as a close call",()=>{
+   const ranked=rankVendors({...base,providers:3});
+   const state=recommendationState(ranked);
+   if(ranked.filter(v=>v.gate.eligible).length>=3&&ranked[0].score-ranked[1].score<5)expect(state.type).toBe("close");
  });
  it("ranking is deterministic",()=>{
    const f={...base,providers:4,clinical:"advanced",switching:true};
