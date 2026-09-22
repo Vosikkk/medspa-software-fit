@@ -11,6 +11,7 @@ if(f.providers<=2){if(["Vagaro","Mangomint","AestheticsPro"].includes(v.name))s+
 else if(f.providers<=5){if(["Mangomint","AestheticsPro","Phorest","PatientNow"].includes(v.name))s+=7}
 else{if(["Zenoti","PatientNow","Phorest"].includes(v.name))s+=12;if(v.name==="Vagaro")s-=10}
 if(f.locations>=2)s+=(v.multi-2)*6;if(f.locations>=3&&v.multi>=4)s+=5;
+if(f.providers>=10&&f.locations>=3){if(v.name==="Zenoti")s+=16;if(v.name==="PatientNow")s+=10;if(v.name==="Phorest")s+=7;if(v.name==="AestheticsPro")s-=10;if(v.name==="Mangomint")s-=8;if(v.name==="Vagaro")s-=14}
 if(f.clinical==="advanced")s+=(v.clinical-2)*6;else if(v.clinical>=5)s-=7;
 if(f.budget==="low")s-=(v.budget-1)*6;if(f.budget==="high"&&v.budget>=4)s+=3;
 if(f.memberships&&["Mangomint","Phorest","Vagaro","Zenoti"].includes(v.name))s+=4;
@@ -20,7 +21,7 @@ if(f.photos&&["AestheticsPro","PatientNow","Zenoti"].includes(v.name))s+=4;
 if(f.integrations&&["PatientNow","Zenoti","Phorest","Mangomint"].includes(v.name))s+=3;
 if(f.appointments==="high"&&["Zenoti","PatientNow","Phorest"].includes(v.name))s+=5;
 if(f.switching&&["Mangomint","PatientNow","Phorest"].includes(v.name))s+=2;
-return Math.max(30,Math.min(97,s))}
+return Math.max(30,Math.min(94,s))}
 function bestFor(r,f){const map={
 Vagaro:f.providers<=2?"a simple, lower-cost start":"teams prioritizing straightforward booking and operations",
 Mangomint:f.providers<=2?"a small practice that wants room to grow":"growing teams that care about polished day-to-day operations",
