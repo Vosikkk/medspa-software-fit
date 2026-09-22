@@ -1,5 +1,5 @@
 import{describe,it,expect}from"vitest";
-import{rankVendors,hardFit,vendors,recommendationState,demoQuestions,resultGuidance,evidenceFor}from"./scoring.js";
+import{rankVendors,hardFit,vendors,recommendationState,demoQuestions,resultGuidance,evidenceFor,evidenceGaps}from"./scoring.js";
 
 const base={providers:3,locations:1,clinical:"basic",appointments:"mid",memberships:true,marketing:false,inventory:false,eprescribe:false,injectableTracking:false,recallTraceability:false,photos:false,integrations:false,chartingRequired:false,consentRequired:false,switching:false,migration:"normal",support:"normal",flexibility:"normal",budget:"mid"};
 const names=f=>rankVendors({...base,...f}).slice(0,3).map(x=>x.name);
@@ -225,6 +225,22 @@ describe("recommendation regression cases",()=>{
    const vagaro=rankVendors(f).find(v=>v.name==="Vagaro");
    const guidance=resultGuidance(vagaro,f);
    expect(guidance.watchOut.join(" ")).toContain("patient-level recall traceability");
+ });
+ it("Worth verifying gaps are profile-specific",()=>{
+   const f={...base,eprescribe:true,recallTraceability:true};
+   const patient=vendors.find(v=>v.name==="PatientNow");
+   const gaps=evidenceGaps(patient,f).map(x=>x.field);
+   expect(gaps).toContain("recallTraceability");
+   expect(gaps).not.toContain("eprescribe");
+ });
+ it("verified profile-critical evidence is removed from gaps",()=>{
+   const f={...base,eprescribe:true,injectableTracking:true,recallTraceability:true,photos:true};
+   const zenoti=vendors.find(v=>v.name==="Zenoti");
+   const gaps=evidenceGaps(zenoti,f).map(x=>x.field);
+   expect(gaps).not.toContain("eprescribe");
+   expect(gaps).not.toContain("injectableTracking");
+   expect(gaps).not.toContain("recallTraceability");
+   expect(gaps).not.toContain("photos");
  });
  it("ranking is deterministic",()=>{
    const f={...base,providers:4,clinical:"advanced",switching:true};
