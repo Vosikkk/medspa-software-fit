@@ -157,10 +157,8 @@ export function evidenceCoverage(v,f){
 }
 
 
-Object.assign(evidence,{
- Mangomint:{consent:{status:"verified",source:"https://www.mangomint.com/features/integrated-forms/",checkedAt:"2026-09-22",note:"Vendor documents consent forms/waivers with signatures saved to the client profile."}},
- AestheticsPro:{consent:{status:"verified",source:"https://www.aestheticspro.com/",checkedAt:"2026-09-22",note:"Vendor describes built-in customizable consent forms."}},
- Phorest:{consent:{status:"verified",source:"https://www.phorest.com/us/features/digital-consultation-forms/",checkedAt:"2026-09-22",note:"Vendor documents HIPAA-compliant digital consultation/consent forms and digital signatures."}},
- Vagaro:{consent:{status:"verified",source:"https://www.vagaro.com/pro/medical-spa-software",checkedAt:"2026-09-22",note:"Vendor documents e-forms and treatment/medical-procedure consent tied to patient profiles."}},
- Zenoti:{consent:{status:"verified",source:"https://help.zenoti.com/en/configuration/forms-configurations/manager-admin-actions.html",checkedAt:"2026-09-22",note:"Vendor documents digital consent forms, signatures and service-specific consent workflows."}}
-});
+Object.assign(evidence.Mangomint,{consent:{status:"verified",source:"https://www.mangomint.com/features/integrated-forms/",checkedAt:"2026-09-22",note:"Vendor documents consent forms/waivers with signatures saved to the client profile."}});
+Object.assign(evidence.AestheticsPro,{consent:{status:"verified",source:"https://www.aestheticspro.com/",checkedAt:"2026-09-22",note:"Vendor describes built-in customizable consent forms."}});
+Object.assign(evidence.Phorest,{consent:{status:"verified",source:"https://www.phorest.com/us/features/digital-consultation-forms/",checkedAt:"2026-09-22",note:"Vendor documents HIPAA-compliant digital consultation/consent forms and digital signatures."}});
+Object.assign(evidence.Vagaro,{consent:{status:"verified",source:"https://www.vagaro.com/pro/medical-spa-software",checkedAt:"2026-09-22",note:"Vendor documents e-forms and treatment/medical-procedure consent tied to patient profiles."}});
+Object.assign(evidence.Zenoti,{consent:{status:"verified",source:"https://help.zenoti.com/en/configuration/forms-configurations/manager-admin-actions.html",checkedAt:"2026-09-22",note:"Vendor documents digital consent forms, signatures and service-specific consent workflows."}});
