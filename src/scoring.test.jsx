@@ -279,6 +279,13 @@ describe("recommendation regression cases",()=>{
    expect(patient.gate.eligible).toBe(false);
    expect(evidenceFor(patient,"consent").status).toBe("unknown");
  });
+ it("adding consent evidence does not overwrite previously verified evidence",()=>{
+   expect(evidenceFor(vendors.find(v=>v.name==="Zenoti"),"eprescribe").status).toBe("verified");
+   expect(evidenceFor(vendors.find(v=>v.name==="Mangomint"),"injectableTracking").status).toBe("verified");
+   expect(evidenceFor(vendors.find(v=>v.name==="AestheticsPro"),"migrationSupport").status).toBe("verified");
+   expect(evidenceFor(vendors.find(v=>v.name==="Vagaro"),"inventoryCap").status).toBe("verified");
+   expect(evidenceFor(vendors.find(v=>v.name==="Phorest"),"multiOps").status).toBe("verified");
+ });
  it("ranking is deterministic",()=>{
    const f={...base,providers:4,clinical:"advanced",switching:true};
    expect(rankVendors(f).map(x=>x.name)).toEqual(rankVendors(f).map(x=>x.name));
