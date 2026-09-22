@@ -61,6 +61,19 @@ describe("recommendation regression cases",()=>{
    expect(patient.score).toBeGreaterThanOrEqual(68);
    expect(mango.score).toBeGreaterThanOrEqual(72);
  });
+ it("multi-location scoring is driven by operational capability",()=>{
+   const ranked=rankVendors({...base,locations:3,providers:8});
+   expect(ranked.find(v=>v.name==="Zenoti").multiOps).toBe(5);
+   expect(ranked.find(v=>v.name==="Phorest").multiOps).toBe(5);
+   expect(ranked.find(v=>v.name==="Mangomint").multiOps).toBe(4);
+ });
+ it("high-volume enterprise profile rewards scale and throughput capability",()=>{
+   const ranked=rankVendors({...base,providers:12,locations:4,appointments:"high",budget:"high"});
+   const top3=ranked.slice(0,3).map(v=>v.name);
+   expect(top3.some(n=>["Zenoti","Phorest"].includes(n))).toBe(true);
+   expect(ranked.find(v=>v.name==="Zenoti").highVolume).toBe(5);
+   expect(ranked.find(v=>v.name==="Phorest").highVolume).toBe(5);
+ });
  it("ranking is deterministic",()=>{
    const f={...base,providers:4,clinical:"advanced",switching:true};
    expect(rankVendors(f).map(x=>x.name)).toEqual(rankVendors(f).map(x=>x.name));
