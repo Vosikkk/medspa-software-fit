@@ -1,5 +1,5 @@
 import{describe,it,expect}from"vitest";
-import{rankVendors,hardFit,vendors,recommendationState,demoQuestions,resultGuidance,evidenceFor,evidenceGaps,relevantEvidenceFields}from"./scoring.js";
+import{rankVendors,hardFit,vendors,recommendationState,demoQuestions,resultGuidance,evidenceFor,evidenceGaps,relevantEvidenceFields,evidenceCoverage,fieldLabels}from"./scoring.js";
 
 const base={providers:3,locations:1,clinical:"basic",appointments:"mid",memberships:true,marketing:false,inventory:false,eprescribe:false,injectableTracking:false,recallTraceability:false,photos:false,integrations:false,chartingRequired:false,consentRequired:false,switching:false,migration:"normal",support:"normal",flexibility:"normal",budget:"mid"};
 const names=f=>rankVendors({...base,...f}).slice(0,3).map(x=>x.name);
@@ -247,6 +247,17 @@ describe("recommendation regression cases",()=>{
    const fields=relevantEvidenceFields(f);
    expect(fields).toEqual(expect.arrayContaining(["eprescribe","photos","multiOps","inventoryCap"]));
    expect(fields).not.toContain("recallTraceability");
+ });
+ it("evidence coverage reports verified profile-critical claims",()=>{
+   const f={...base,eprescribe:true,injectableTracking:true,recallTraceability:true,photos:true};
+   const zenoti=vendors.find(v=>v.name==="Zenoti");
+   const coverage=evidenceCoverage(zenoti,f);
+   expect(coverage.verified).toBe(coverage.total);
+   expect(coverage.label).toContain("verified");
+ });
+ it("capability keys have readable labels",()=>{
+   expect(fieldLabels.recallTraceability).toBe("Patient-level recall traceability");
+   expect(fieldLabels.migrationSupport).toBe("Data migration");
  });
  it("ranking is deterministic",()=>{
    const f={...base,providers:4,clinical:"advanced",switching:true};
