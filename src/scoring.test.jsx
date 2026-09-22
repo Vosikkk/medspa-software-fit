@@ -1,7 +1,7 @@
 import{describe,it,expect}from"vitest";
 import{rankVendors,hardFit,vendors,recommendationState,demoQuestions,resultGuidance,evidenceFor}from"./scoring.js";
 
-const base={providers:3,locations:1,clinical:"basic",appointments:"mid",memberships:true,marketing:false,inventory:false,eprescribe:false,injectableTracking:false,photos:false,integrations:false,chartingRequired:false,consentRequired:false,switching:false,migration:"normal",support:"normal",flexibility:"normal",budget:"mid"};
+const base={providers:3,locations:1,clinical:"basic",appointments:"mid",memberships:true,marketing:false,inventory:false,eprescribe:false,injectableTracking:false,recallTraceability:false,photos:false,integrations:false,chartingRequired:false,consentRequired:false,switching:false,migration:"normal",support:"normal",flexibility:"normal",budget:"mid"};
 const names=f=>rankVendors({...base,...f}).slice(0,3).map(x=>x.name);
 
 describe("recommendation regression cases",()=>{
@@ -202,6 +202,18 @@ describe("recommendation regression cases",()=>{
      expect(v.charting).toBe(true);
      expect(v.consent).toBe(true);
    }
+ });
+ it("recall traceability is stricter than lot tracking",()=>{
+   const f={...base,injectableTracking:true,recallTraceability:true};
+   const ranked=rankVendors(f);
+   expect(ranked[0].name).toBe("Zenoti");
+   expect(ranked[0].gate.eligible).toBe(true);
+   for(const v of ranked.filter(v=>v.name!=="Zenoti"))expect(v.gate.misses).toContain("patient-level recall traceability");
+ });
+ it("lot tracking alone does not require recall capability",()=>{
+   const f={...base,injectableTracking:true};
+   const eligible=rankVendors(f).filter(v=>v.gate.eligible).map(v=>v.name);
+   expect(eligible).toEqual(expect.arrayContaining(["Mangomint","AestheticsPro","Phorest","Vagaro","Zenoti"]));
  });
  it("ranking is deterministic",()=>{
    const f={...base,providers:4,clinical:"advanced",switching:true};
