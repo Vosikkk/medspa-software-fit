@@ -1,10 +1,29 @@
 import{describe,it,expect}from"vitest";
-import{rankVendors,hardFit,vendors}from"./main.jsx";
+import{rankVendors,hardFit,vendors}from"./scoring.js";
 
 const base={providers:3,locations:1,clinical:"basic",appointments:"mid",memberships:true,marketing:false,inventory:false,eprescribe:false,injectableTracking:false,photos:false,integrations:false,switching:false,migration:"normal",support:"normal",flexibility:"normal",budget:"mid"};
 const names=f=>rankVendors({...base,...f}).slice(0,3).map(x=>x.name);
 
 describe("recommendation regression cases",()=>{
+ const profiles=[
+  ["solo starter",{providers:1,budget:"low"}],
+  ["small clinical",{providers:3,clinical:"advanced",eprescribe:true}],
+  ["switching practice",{providers:4,switching:true,migration:"important",support:"important"}],
+  ["two locations",{providers:6,locations:2}],
+  ["enterprise",{providers:15,locations:5,appointments:"high",budget:"high"}],
+  ["marketing heavy",{providers:5,marketing:true,memberships:true}],
+  ["deep injectable",{providers:4,clinical:"advanced",eprescribe:true,injectableTracking:true}],
+  ["high volume clinical",{providers:8,locations:2,clinical:"advanced",appointments:"high"}]
+ ];
+ it.each(profiles)("%s profile always returns three ordered recommendations",(_name,overrides)=>{
+   const ranked=rankVendors({...base,...overrides});
+   expect(ranked).toHaveLength(vendors.length);
+   expect(ranked.slice(0,3)).toHaveLength(3);
+   expect(new Set(ranked.map(v=>v.name)).size).toBe(vendors.length);
+   for(let i=1;i<ranked.length;i++){
+     if(ranked[i-1].gate.eligible===ranked[i].gate.eligible)expect(ranked[i-1].score).toBeGreaterThanOrEqual(ranked[i].score);
+   }
+ });
  it("small basic low-budget practice favors lightweight products",()=>{
    const top=names({providers:1,budget:"low"});
    expect(top).toContain("Vagaro");
