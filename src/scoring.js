@@ -120,3 +120,23 @@ Object.assign(evidence,{
  }
 });
 export function evidenceFor(v,field){return evidence[v.name]?.[field]||{status:"unknown",source:null,checkedAt:null,note:"Not yet independently mapped to current vendor documentation."}}
+
+export function relevantEvidenceFields(f){
+ const fields=[];
+ if(f.eprescribe)fields.push("eprescribe");
+ if(f.injectableTracking)fields.push("injectableTracking");
+ if(f.recallTraceability)fields.push("recallTraceability");
+ if(f.photos)fields.push("photos");
+ if(f.chartingRequired)fields.push("charting");
+ if(f.consentRequired)fields.push("consent");
+ if(f.locations>=2)fields.push("multiOps");
+ if(f.inventory)fields.push("inventoryCap");
+ if(f.integrations)fields.push("integrationsCap");
+ if(f.switching&&f.migration==="important")fields.push("migrationSupport");
+ if(f.support==="important")fields.push("humanSupport");
+ if(f.flexibility==="important")fields.push("contractFlex");
+ return [...new Set(fields)];
+}
+export function evidenceGaps(v,f){
+ return relevantEvidenceFields(f).map(field=>({field,...evidenceFor(v,field)})).filter(x=>x.status!=="verified");
+}
