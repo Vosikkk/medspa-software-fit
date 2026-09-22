@@ -267,6 +267,18 @@ describe("recommendation regression cases",()=>{
    expect(vendors.find(v=>v.name==="Zenoti").recallTraceability).toBe(true);
    expect(vendors.find(v=>v.name==="AestheticsPro").recallTraceability).toBe(false);
  });
+ it("consent hard requirement only trusts audited vendor evidence",()=>{
+   const f={...base,consentRequired:true};
+   const ranked=rankVendors(f);
+   for(const name of ["Mangomint","AestheticsPro","Phorest","Vagaro","Zenoti"]){
+     const v=ranked.find(x=>x.name===name);
+     expect(v.gate.eligible).toBe(true);
+     expect(evidenceFor(v,"consent").status).toBe("verified");
+   }
+   const patient=ranked.find(x=>x.name==="PatientNow");
+   expect(patient.gate.eligible).toBe(false);
+   expect(evidenceFor(patient,"consent").status).toBe("unknown");
+ });
  it("ranking is deterministic",()=>{
    const f={...base,providers:4,clinical:"advanced",switching:true};
    expect(rankVendors(f).map(x=>x.name)).toEqual(rankVendors(f).map(x=>x.name));
