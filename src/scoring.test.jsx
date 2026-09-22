@@ -215,6 +215,17 @@ describe("recommendation regression cases",()=>{
    const eligible=rankVendors(f).filter(v=>v.gate.eligible).map(v=>v.name);
    expect(eligible).toEqual(expect.arrayContaining(["Mangomint","AestheticsPro","Phorest","Vagaro","Zenoti"]));
  });
+ it("recall requirement produces a patient-level traceability demo question",()=>{
+   const f={...base,injectableTracking:true,recallTraceability:true};
+   const qs=demoQuestions(f,rankVendors(f));
+   expect(qs.some(q=>q.includes("affected patient"))).toBe(true);
+ });
+ it("blocked recall vendors explain the exact missing capability",()=>{
+   const f={...base,recallTraceability:true};
+   const vagaro=rankVendors(f).find(v=>v.name==="Vagaro");
+   const guidance=resultGuidance(vagaro,f);
+   expect(guidance.watchOut.join(" ")).toContain("patient-level recall traceability");
+ });
  it("ranking is deterministic",()=>{
    const f={...base,providers:4,clinical:"advanced",switching:true};
    expect(rankVendors(f).map(x=>x.name)).toEqual(rankVendors(f).map(x=>x.name));
