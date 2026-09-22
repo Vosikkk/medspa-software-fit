@@ -25,6 +25,6 @@ if(f.switching)s+=(v.migrationSupport-2)*2;
 if(f.switching&&f.migration==="important")s+=(v.migrationSupport-2)*3;
 if(f.support==="important")s+=(v.humanSupport-2)*3;
 if(f.flexibility==="important")s+=(v.contractFlex-2)*3;
-return Math.max(30,Math.min(94,s))}
-export function fitLabel(score){if(score>=82)return "Strong fit";if(score>=70)return "Good fit";return "Possible fit"}
-export function rankVendors(f){return vendors.map(v=>({...v,score:score(v,f),gate:hardFit(v,f)})).sort((a,b)=>(b.gate.eligible-a.gate.eligible)||(b.score-a.score))}
+return s}
+export function fitLabel(score,margin=0,gate={eligible:true}){if(!gate.eligible)return "Does not meet a required need";if(score>=82&&margin>=5)return "Strong fit";if(score>=70)return "Good fit";return "Possible fit"}
+export function rankVendors(f){const ranked=vendors.map(v=>({...v,score:score(v,f),gate:hardFit(v,f)})).sort((a,b)=>(b.gate.eligible-a.gate.eligible)||(b.score-a.score));return ranked.map((v,i)=>({...v,margin:i<ranked.length-1&&ranked[i+1].gate.eligible===v.gate.eligible?v.score-ranked[i+1].score:0}))}
