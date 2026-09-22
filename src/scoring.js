@@ -140,3 +140,15 @@ export function relevantEvidenceFields(f){
 export function evidenceGaps(v,f){
  return relevantEvidenceFields(f).map(field=>({field,...evidenceFor(v,field)})).filter(x=>x.status!=="verified");
 }
+
+export const fieldLabels={
+ eprescribe:"E-prescribing",injectableTracking:"Injectable lot / batch tracking",recallTraceability:"Patient-level recall traceability",
+ photos:"Before / after photos",charting:"Clinical charting",consent:"Digital consent forms",multiOps:"Multi-location operations",
+ inventoryCap:"Inventory",integrationsCap:"Integrations",migrationSupport:"Data migration",humanSupport:"Onboarding & support",contractFlex:"Contract flexibility"
+};
+export function evidenceCoverage(v,f){
+ const fields=relevantEvidenceFields(f);
+ if(!fields.length)return {verified:0,total:0,label:"No critical evidence selected"};
+ const verified=fields.filter(field=>evidenceFor(v,field).status==="verified").length;
+ return {verified,total:fields.length,label:`${verified}/${fields.length} profile-critical claims verified`};
+}
