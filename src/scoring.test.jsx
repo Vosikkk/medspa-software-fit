@@ -43,6 +43,24 @@ describe("recommendation regression cases",()=>{
    const ranked=rankVendors({...base,photos:true});
    expect(ranked.filter(v=>v.photos).length).toBeGreaterThan(0);
  });
+ it("switching with migration and support preferences rewards documented support",()=>{
+   const ranked=rankVendors({...base,switching:true,migration:"important",support:"important"});
+   const patient=ranked.find(v=>v.name==="PatientNow");
+   const phorest=ranked.find(v=>v.name==="Phorest");
+   expect(patient.migrationSupport).toBe(5);
+   expect(patient.humanSupport).toBe(5);
+   expect(phorest.migrationSupport).toBe(5);
+   expect(phorest.humanSupport).toBe(5);
+ });
+ it("contract flexibility rewards verified no-contract vendors",()=>{
+   const ranked=rankVendors({...base,flexibility:"important"});
+   const patient=ranked.find(v=>v.name==="PatientNow");
+   const mango=ranked.find(v=>v.name==="Mangomint");
+   expect(patient.contractFlex).toBe(5);
+   expect(mango.contractFlex).toBe(5);
+   expect(patient.score).toBeGreaterThanOrEqual(68);
+   expect(mango.score).toBeGreaterThanOrEqual(72);
+ });
  it("ranking is deterministic",()=>{
    const f={...base,providers:4,clinical:"advanced",switching:true};
    expect(rankVendors(f).map(x=>x.name)).toEqual(rankVendors(f).map(x=>x.name));
