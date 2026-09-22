@@ -1,5 +1,5 @@
 import{describe,it,expect}from"vitest";
-import{rankVendors,hardFit,vendors,recommendationState,demoQuestions,resultGuidance,evidenceFor,evidenceGaps}from"./scoring.js";
+import{rankVendors,hardFit,vendors,recommendationState,demoQuestions,resultGuidance,evidenceFor,evidenceGaps,relevantEvidenceFields}from"./scoring.js";
 
 const base={providers:3,locations:1,clinical:"basic",appointments:"mid",memberships:true,marketing:false,inventory:false,eprescribe:false,injectableTracking:false,recallTraceability:false,photos:false,integrations:false,chartingRequired:false,consentRequired:false,switching:false,migration:"normal",support:"normal",flexibility:"normal",budget:"mid"};
 const names=f=>rankVendors({...base,...f}).slice(0,3).map(x=>x.name);
@@ -241,6 +241,12 @@ describe("recommendation regression cases",()=>{
    expect(gaps).not.toContain("injectableTracking");
    expect(gaps).not.toContain("recallTraceability");
    expect(gaps).not.toContain("photos");
+ });
+ it("evidence panel only asks for fields relevant to the buyer profile",()=>{
+   const f={...base,eprescribe:true,photos:true,locations:2,inventory:true};
+   const fields=relevantEvidenceFields(f);
+   expect(fields).toEqual(expect.arrayContaining(["eprescribe","photos","multiOps","inventoryCap"]));
+   expect(fields).not.toContain("recallTraceability");
  });
  it("ranking is deterministic",()=>{
    const f={...base,providers:4,clinical:"advanced",switching:true};
