@@ -108,6 +108,35 @@ describe("recommendation regression cases",()=>{
    const vagaro=ranked.find(v=>v.name==="Vagaro");
    expect(patient.marketingCap).toBeGreaterThan(vagaro.marketingCap);
  });
+ it("real buyer: 2-provider first system under $200 avoids enterprise overkill",()=>{
+   const ranked=rankVendors({...base,providers:2,locations:1,budget:"low",clinical:"basic",switching:false});
+   const top=ranked.slice(0,3).map(v=>v.name);
+   expect(top).toContain("Vagaro");
+   expect(top).not.toContain("Zenoti");
+ });
+ it("real buyer: 4-provider clinical switch with eRx keeps only eligible clinical systems above blocked vendors",()=>{
+   const ranked=rankVendors({...base,providers:4,clinical:"advanced",eprescribe:true,switching:true,migration:"important",support:"important",flexibility:"important",inventory:true,photos:true});
+   const firstBlocked=ranked.findIndex(v=>!v.gate.eligible);
+   expect(firstBlocked).toBeGreaterThan(0);
+   expect(ranked.slice(0,firstBlocked).every(v=>v.gate.eligible)).toBe(true);
+   expect(ranked.slice(0,3).map(v=>v.name)).not.toContain("Mangomint");
+ });
+ it("real buyer: 3-location high-volume group surfaces enterprise-scale options",()=>{
+   const top=names({providers:10,locations:3,appointments:"high",budget:"high",marketing:true,inventory:true,integrations:true});
+   expect(top).toContain("Zenoti");
+   expect(top).toContain("Phorest");
+ });
+ it("real buyer: injectable lot tracking is not faked by generic inventory support",()=>{
+   const ranked=rankVendors({...base,providers:5,clinical:"advanced",inventory:true,injectableTracking:true});
+   expect(ranked[0].name).toBe("Zenoti");
+   expect(ranked.find(v=>v.name==="PatientNow").gate.misses).toContain("injectable / batch tracking");
+ });
+ it("real buyer: migration/support preferences can change ranking without bypassing hard requirements",()=>{
+   const ranked=rankVendors({...base,providers:4,clinical:"advanced",eprescribe:true,switching:true,migration:"important",support:"important"});
+   const eligible=ranked.filter(v=>v.gate.eligible);
+   expect(eligible.length).toBeGreaterThanOrEqual(3);
+   expect(eligible.every(v=>v.deepMedical&&v.eprescribe)).toBe(true);
+ });
  it("ranking is deterministic",()=>{
    const f={...base,providers:4,clinical:"advanced",switching:true};
    expect(rankVendors(f).map(x=>x.name)).toEqual(rankVendors(f).map(x=>x.name));
