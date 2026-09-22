@@ -67,3 +67,19 @@ export function resultGuidance(v,f){
  if(f.flexibility==="important"&&v.contractFlex<4)watch.push("verify contract term, renewal and cancellation conditions");
  return {bestIf:best.slice(0,2),watchOut:watch.slice(0,2)};
 }
+
+export const evidence={
+ PatientNow:{
+  eprescribe:{status:"verified",source:"https://www.patientnow.com/pricing",checkedAt:"2026-09-22",note:"e-Prescribing is listed as an optional add-on; availability varies by package/edition."},
+  migrationSupport:{status:"verified",source:"https://www.patientnow.com/",checkedAt:"2026-09-22",note:"Vendor states onboarding handles data migration, staff training and setup at no extra cost."},
+  contractFlex:{status:"verified",source:"https://www.patientnow.com/",checkedAt:"2026-09-22",note:"Vendor states no long-term contract."},
+  photos:{status:"verified",source:"https://www.patientnow.com/",checkedAt:"2026-09-22",note:"Vendor describes before-and-after photo management for aesthetic practices."}
+ },
+ Zenoti:{
+  eprescribe:{status:"verified",source:"https://www.zenoti.com/medical-spa-software/clinical-features_v1",checkedAt:"2026-09-22",note:"Vendor documents Surescripts e-prescription integration."},
+  injectableTracking:{status:"verified",source:"https://www.zenoti.com/medical-spa-software/injectable-tracking",checkedAt:"2026-09-22",note:"Vendor documents vial/lot registration, expiration dates, dispensing records and recall tracing."},
+  photos:{status:"verified",source:"https://www.zenoti.com/medical-spa-software/clinical-features_v1",checkedAt:"2026-09-22",note:"Vendor documents HIPAA-compliant before/after photo management."},
+  charting:{status:"verified",source:"https://www.zenoti.com/medical-spa-software/clinical-features_v1",checkedAt:"2026-09-22",note:"Vendor documents procedure-specific clinical charting."}
+ }
+};
+export function evidenceFor(v,field){return evidence[v.name]?.[field]||{status:"unknown",source:null,checkedAt:null,note:"Not yet independently mapped to current vendor documentation."}}
