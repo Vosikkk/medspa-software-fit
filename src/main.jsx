@@ -1,10 +1,10 @@
 import React,{useState}from"react";import{createRoot}from"react-dom/client";import"./style.css";
 const vendors=[
-{name:"Mangomint",base:72,cost:"From ~$120/location + users",strengths:["small-to-growing teams","memberships & inventory","HIPAA-oriented forms/charting"],clinical:2,multi:3,budget:2,crm:4},
-{name:"AestheticsPro",base:70,cost:"Published plans from ~$160/mo",strengths:["aesthetics-specific workflows","photos & patient records","growing practices"],clinical:4,multi:3,budget:2,crm:3},
-{name:"PatientNow",base:68,cost:"Custom quote",strengths:["medical-aesthetics workflows","patient engagement","clinical + business stack"],clinical:5,multi:4,budget:4,crm:5},
-{name:"Phorest",base:68,cost:"Custom quote",strengths:["3+ staff","marketing & memberships","multi-location operations"],clinical:3,multi:4,budget:3,crm:5},
-{name:"Vagaro",base:68,cost:"Lower-cost entry tier",strengths:["small practices","booking & memberships","simple operations"],clinical:1,multi:2,budget:1,crm:3},
+{name:"Mangomint",base:72,cost:"$120/location + $10/user",strengths:["HIPAA-capable forms & charting with BAA","memberships, inventory & integrations","free onboarding/data transfer; cancel anytime"],clinical:3,multi:3,budget:2,crm:4},
+{name:"AestheticsPro",base:70,cost:"$160 Pro-Plus; $285 Executive; $350 Enterprise",strengths:["med-spa EMR, photos & 500+ forms","e-prescribing and inventory","Executive/Enterprise support multi-location"],clinical:5,multi:4,budget:2,crm:3},
+{name:"PatientNow",base:68,cost:"Custom quote",strengths:["aesthetic EMR, photos & inventory","memberships, marketing & practice management","free onboarding/migration; no long-term contract"],clinical:5,multi:4,budget:4,crm:5},
+{name:"Phorest",base:68,cost:"Custom quote",strengths:["HIPAA charting, consent & before/after photos","marketing, memberships & inventory","centralized multi-location reporting"],clinical:3,multi:5,budget:3,crm:5},
+{name:"Vagaro",base:68,cost:"US base from $23.99/mo + calendars/add-ons",strengths:["HIPAA EMR, SOAP notes & before/after photos","e-prescribing, memberships & inventory","multi-location management available"],clinical:4,multi:4,budget:1,crm:3},
 {name:"Zenoti",base:64,cost:"Custom quote",strengths:["complex clinical workflows","multi-location management","advanced operations"],clinical:5,multi:5,budget:5,crm:5}];
 function score(v,f){let s=v.base;
 if(f.providers<=2){if(["Vagaro","Mangomint","AestheticsPro"].includes(v.name))s+=10;if(["Zenoti","PatientNow"].includes(v.name))s-=10}
@@ -16,7 +16,7 @@ if(f.clinical==="advanced")s+=(v.clinical-2)*6;else if(v.clinical>=5)s-=7;
 if(f.budget==="low")s-=(v.budget-1)*6;if(f.budget==="high"&&v.budget>=4)s+=3;
 if(f.memberships&&["Mangomint","Phorest","Vagaro","Zenoti"].includes(v.name))s+=4;
 if(f.marketing)s+=(v.crm-3)*3;if(f.inventory&&["Mangomint","AestheticsPro","Zenoti","Phorest"].includes(v.name))s+=3;
-if(f.eprescribe&&["PatientNow","Zenoti","AestheticsPro"].includes(v.name))s+=6;
+if(f.eprescribe&&["Zenoti","AestheticsPro","Vagaro"].includes(v.name))s+=6;if(f.eprescribe&&v.name==="PatientNow")s+=3;
 if(f.photos&&["AestheticsPro","PatientNow","Zenoti"].includes(v.name))s+=4;
 if(f.integrations&&["PatientNow","Zenoti","Phorest","Mangomint"].includes(v.name))s+=3;
 if(f.appointments==="high"&&["Zenoti","PatientNow","Phorest"].includes(v.name))s+=5;
