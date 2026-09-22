@@ -82,4 +82,24 @@ export const evidence={
   charting:{status:"verified",source:"https://www.zenoti.com/medical-spa-software/clinical-features_v1",checkedAt:"2026-09-22",note:"Vendor documents procedure-specific clinical charting."}
  }
 };
+
+Object.assign(evidence,{
+ Mangomint:{
+  charting:{status:"verified",source:"https://www.mangomint.com/cartessa/",checkedAt:"2026-09-22",note:"Vendor documents HIPAA-compliant SOAP notes and charting."},
+  photos:{status:"verified",source:"https://www.mangomint.com/cartessa/",checkedAt:"2026-09-22",note:"Vendor documents image markup and before/after photo tracking."},
+  migrationSupport:{status:"verified",source:"https://www.mangomint.com/cartessa/",checkedAt:"2026-09-22",note:"Vendor documents white-glove onboarding and data migration for this partner offer; verify applicability to the quoted plan."}
+ },
+ Phorest:{
+  charting:{status:"verified",source:"https://www.phorest.com/us/industry/medical-spa-software/",checkedAt:"2026-09-22",note:"Vendor documents HIPAA-compliant charting, consultation forms and treatment plans."},
+  photos:{status:"verified",source:"https://www.phorest.com/us/industry/medical-spa-software/",checkedAt:"2026-09-22",note:"Vendor documents before/after photo management and comparison views."},
+  multiOps:{status:"verified",source:"https://www.phorest.com/us/industry/multi-location/",checkedAt:"2026-09-22",note:"Vendor documents centralized reporting, shared client records, cross-location staff controls and memberships."}
+ },
+ Vagaro:{
+  eprescribe:{status:"verified",source:"https://www.vagaro.com/pro/medical-spa-software",checkedAt:"2026-09-22",note:"Vendor documents electronic prescriptions to partner pharmacies."},
+  charting:{status:"verified",source:"https://www.vagaro.com/pro/medical-spa-software",checkedAt:"2026-09-22",note:"Vendor documents HIPAA-compliant charting and SOAP notes."},
+  photos:{status:"verified",source:"https://www.vagaro.com/pro/medical-spa-software",checkedAt:"2026-09-22",note:"Vendor documents secure before/after photos."},
+  multiOps:{status:"verified",source:"https://www.vagaro.com/pro/multi-location",checkedAt:"2026-09-22",note:"Vendor documents unified multi-location scheduling, client data, reporting and cross-location memberships."},
+  inventoryCap:{status:"verified",source:"https://www.vagaro.com/pro/inventory",checkedAt:"2026-09-22",note:"Vendor documents real-time inventory, purchase orders, reorder alerts and location/storage assignment."}
+ }
+});
 export function evidenceFor(v,field){return evidence[v.name]?.[field]||{status:"unknown",source:null,checkedAt:null,note:"Not yet independently mapped to current vendor documentation."}}
