@@ -1,5 +1,5 @@
 import{describe,it,expect}from"vitest";
-import{rankVendors,hardFit,vendors,recommendationState,demoQuestions}from"./scoring.js";
+import{rankVendors,hardFit,vendors,recommendationState,demoQuestions,resultGuidance}from"./scoring.js";
 
 const base={providers:3,locations:1,clinical:"basic",appointments:"mid",memberships:true,marketing:false,inventory:false,eprescribe:false,injectableTracking:false,photos:false,integrations:false,switching:false,migration:"normal",support:"normal",flexibility:"normal",budget:"mid"};
 const names=f=>rankVendors({...base,...f}).slice(0,3).map(x=>x.name);
@@ -166,6 +166,20 @@ describe("recommendation regression cases",()=>{
  it("injectable workflow gets a lot-tracking demo question",()=>{
    const f={...base,clinical:"advanced",injectableTracking:true};
    expect(demoQuestions(f,rankVendors(f)).some(q=>q.includes("lot numbers"))).toBe(true);
+ });
+ it("result guidance exposes requirement conflicts instead of hiding them",()=>{
+   const f={...base,clinical:"advanced",eprescribe:true};
+   const mango=rankVendors(f).find(v=>v.name==="Mangomint");
+   const guidance=resultGuidance(mango,f);
+   expect(guidance.watchOut.join(" ")).toContain("advanced clinical");
+   expect(guidance.watchOut.join(" ")).toContain("e-prescribing");
+ });
+ it("result guidance is generated from profile and capability data",()=>{
+   const f={...base,providers:8,locations:2,marketing:true};
+   const zenoti=rankVendors(f).find(v=>v.name==="Zenoti");
+   const guidance=resultGuidance(zenoti,f);
+   expect(guidance.bestIf).toContain("larger operating teams");
+   expect(guidance.bestIf).toContain("multi-location operations");
  });
  it("ranking is deterministic",()=>{
    const f={...base,providers:4,clinical:"advanced",switching:true};
